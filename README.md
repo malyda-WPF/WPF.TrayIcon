@@ -17,3 +17,82 @@ _notifyIcon.Icon = TrayIcon.Properties.Resources.Icon;
 > TrayIcon je název namespace, ten je třeba změnit dle názvu Assebmly
 
 ## Aplikace 
+Podstatou je, že se hlavní okno (MainWindow) aplikace nikdy nezavře, pouze přejde do stavu hidden.
+
+Následující ukázky jsou všechny ve třídě **App**. V této třídě se také nachází dvě proměnné, které jsou využívány dalšími metodami.
+```csharp
+public partial class App : Application
+{
+    private bool _isExit;
+    private System.Windows.Forms.NotifyIcon _notifyIcon;
+...
+```
+
+Při spuštění aplikace se nastaví tray icon, její kontextová nabídka a nastaví se pro hlavní aplikační okno event handler (odchycení události) pro událost _Closing_.
+
+
+```csharp
+protected override void OnStartup(StartupEventArgs e)
+{
+    base.OnStartup(e);
+            
+    MainWindow = new MainWindow();
+    MainWindow.Closing += MainWindow_Closing;
+
+    _notifyIcon = new System.Windows.Forms.NotifyIcon();
+    _notifyIcon.DoubleClick += (s, args) => ShowMainWindow();
+    // Set application icon
+    _notifyIcon.Icon = TrayIcon.Properties.Resources.Icon;
+    _notifyIcon.Visible = true;
+
+    CreateContextMenu();
+}
+```
+Nastavení pro kontextovou nabídku se provede opět pomocí Windows Forms knihovny
+```csharp
+private void CreateContextMenu()
+{
+    _notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+    _notifyIcon.ContextMenuStrip.Items.Add("MainWindow...").Click += (s, e) => ShowMainWindow();
+    _notifyIcon.ContextMenuStrip.Items.Add("Exit").Click += (s, e) => ExitApplication();
+}
+```
+Metoda, která se provádí při zavírání hlavní aplikačního okna (MainWinow)
+```csharp
+private void MainWindow_Closing(object sender, CancelEventArgs e)
+{
+    if (!_isExit)
+    {
+        e.Cancel = true;
+        MainWindow.Hide(); // A hidden window can be shown again, a closed one not
+    }
+}
+```
+Poslední dvě metody, které jsou využívány v rámci kontextové nabídky.
+
+Zobrazení okna
+```csharp
+private void ShowMainWindow()
+{
+    if (MainWindow.IsVisible)
+    {
+        if (MainWindow.WindowState == WindowState.Minimized)
+            MainWindow.WindowState = WindowState.Normal;
+        MainWindow.Activate();
+    }
+    else
+    {
+        MainWindow.Show();
+    }
+}
+```
+A ukončení aplikace
+```csharp
+private void ExitApplication()
+{
+    _isExit = true;
+    MainWindow.Close();
+    _notifyIcon.Dispose();
+    _notifyIcon = null;
+}
+```

@@ -34,15 +34,19 @@ namespace WPF.TrayIcon
 
             CreateContextMenu();
         }
-
+        /// <summary>
+        /// Context menu initialization
+        /// </summary>
         private void CreateContextMenu()
         {
-            _notifyIcon.ContextMenuStrip =
-                new System.Windows.Forms.ContextMenuStrip();
+            _notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             _notifyIcon.ContextMenuStrip.Items.Add("MainWindow...").Click += (s, e) => ShowMainWindow();
             _notifyIcon.ContextMenuStrip.Items.Add("Exit").Click += (s, e) => ExitApplication();
         }
 
+        /// <summary>
+        /// Close MainWindow and dispose notification icon
+        /// </summary>
         private void ExitApplication()
         {
             _isExit = true;
@@ -51,14 +55,21 @@ namespace WPF.TrayIcon
             _notifyIcon = null;
         }
 
+        /// <summary>
+        /// Show MainWindow or change its state from Minimized to Normal
+        /// </summary>
         private void ShowMainWindow()
         {
-            if (MainWindow.IsVisible)
+ 
+            if (MainWindow.WindowState == WindowState.Minimized)
             {
-                if (MainWindow.WindowState == WindowState.Minimized)
-                    MainWindow.WindowState = WindowState.Normal;
+                MainWindow.WindowState = WindowState.Normal;
                 MainWindow.Activate();
             }
+            else if(MainWindow.Visibility != Visibility.Visible)
+            {
+                MainWindow.Visibility = Visibility.Visible;
+            }         
             else
             {
                 MainWindow.Show();

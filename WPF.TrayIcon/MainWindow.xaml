@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WPF.TrayIcon"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Label FontSize="32">Close this window, but application won't exit</Label>
+        <Label FontSize="26">App icon will stay on main bar next to the clock</Label>
+    </StackPanel>
 </Window>
