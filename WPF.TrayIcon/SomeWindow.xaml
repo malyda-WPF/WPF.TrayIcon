@@ -1,4 +1,4 @@
-﻿<Window x:Class="WPF.TrayIcon.MainWindow"
+﻿<Window x:Class="WPF.TrayIcon.SomeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WPF.TrayIcon"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Label FontSize="32">Close this window, but application won't exit</Label>
+        <Label FontSize="26">App icon will stay on main bar next to the clock</Label>
+    </StackPanel>
 </Window>
